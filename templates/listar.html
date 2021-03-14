@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Listar
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="form-row">
+        <a class="btn btn-primary" href="/cadastrar" role="button"><strong>Cadastrar</strong></a>
+            <select name="state" id="maxRows" class="form-control col-md-2">
+                <option value="999999999">Listar todos</option>
+                <option value="5">5 em 5</option>
+                <option value="10">10 em 10</option>
+                <option value="15">15 em 15</option>
+                <option value="30">30 em 30</option>
+                <option value="100">100 em 100</option>
+            </select>
+        </div>
+        <table class="table table-bordered table-sm" id="tabela">
+            <thead>
+                <tr>
+                    <th><input type="text" id="txtColuna1" placeholder="Nome"/></th>
+                    <th><input type="text" id="txtColuna2" placeholder="CPF"/></th>
+                    <th><input type="text" id="txtColuna3" placeholder="E-mail"/></th>
+                    <th><input type="text" id="txtColuna4" placeholder="Data Nasc."/></th>
+                    <th><- Filtros</th>
+                </tr>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>E-mail</th>
+                    <th>Data Nasc.</th>
+                    <th>Opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pessoas %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[4] }}</td>
+                    <td align="center">
+                         <a href="/alterar/{{ item[1]}}" class="btn btn-primary btn-sm">
+                             <span class="fa fa-trash" aria-hidden="true"></span>
+                             <span><strong>Alterar</strong></span>
+                         </a>
+                         <a href="/deletar/{{ item[1]}}" class="btn btn-danger btn-sm">
+                             <span class="fa fa-trash" aria-hidden="true"></span>
+                             <span><strong>Deletar</strong></span>
+                         </a>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination-container">
+            <nav>
+                <ul class="pagination"></ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+
+    <script>
+        $(function(){
+            $("#tabela input").keyup(function(){
+                var index = $(this).parent().index();
+                var nth = "#tabela td:nth-child("+(index+1).toString()+")";
+                var valor = $(this).val().toUpperCase();
+                $("#tabela tbody tr").show();
+                $(nth).each(function(){
+                    if($(this).text().toUpperCase().indexOf(valor) < 0){
+                        $(this).parent().hide();
+                    }
+                });
+            });
+
+            $("#tabela input").blur(function(){
+                $(this).val("");
+            });
+        });
+    </script>
+
+    <script src="/static/listar.js"></script>
+
+{% endblock %}

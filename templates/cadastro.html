@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Cadastro
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <form method="post" enctype="multipart/form-data" class="form-group col-md-6 offset-md-3">
+            {% from "macro.html" import render_field %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <br>
+            <div class="container text-center">
+                <img src="#" id="blah" height="150" width="150">
+                <br>
+                {{ render_field(field.foto, class='class="form-group col-md-6"', id="imgInp")}}
+            </div>
+            <div>
+                {{ render_field(field.nome, class='form-control', placeholder='nome')}}
+            </div>
+            <div class="form-row text-center">
+                <div class="form-group col-md-6">
+                    {{ render_field(field.cpf, class='class="form-control"', placeholder='cpf', onkeypress="$(this).mask('000.000.000-00');")}}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ render_field(field.data_nascimento, class='class="form-control"')}}
+                </div>
+            </div>
+            <div>
+                {{ render_field(field.email, class='form-control', placeholder='e-mail')}}
+            </div>
+            <br>
+            <div class="container text-center">
+                <button type="submit" class="btn btn-primary"><strong>Cadastrar</strong></button>
+                <a href="/" class="btn btn-danger">
+                    <span class="fa fa-trash" aria-hidden="true"></span>
+                        <span><strong>Cancelar</strong></span>
+                </a>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#blah').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#imgInp").change(function() {
+            readURL(this);
+        });
+    </script>
+{% endblock %}
